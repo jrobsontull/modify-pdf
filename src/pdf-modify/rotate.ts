@@ -5,7 +5,14 @@ const rotatePage = (page: PDFPage, degree: number): PDFPage => {
   return page;
 };
 
-const rotatePages = (doc: PDFDocument, degree: number): PDFDocument => {
+const rotatePages = (pages: PDFPage[], degree: number): PDFPage[] => {
+  for (const page of pages) {
+    page.setRotation(degrees(degree));
+  }
+  return pages;
+};
+
+const rotateDocument = (doc: PDFDocument, degree: number): PDFDocument => {
   const pages = doc.getPages();
   pages.forEach((page) => {
     page.setRotation(degrees(degree));
@@ -13,4 +20,4 @@ const rotatePages = (doc: PDFDocument, degree: number): PDFDocument => {
   return doc;
 };
 
-export { rotatePage, rotatePages };
+export { rotatePage, rotatePages, rotateDocument };
