@@ -159,6 +159,13 @@ Needs documenting.
 - `extractPages()`
 - `duplicatePages()`
 
+### Inserting pages
+
+Needs documenting.
+
+- `insertPage()`
+- `insertPages()`
+
 ### Metadata
 
 Needs documenting.
