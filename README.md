@@ -1,6 +1,7 @@
 <div align="center">
     <h1>pdf-modify</h1>
     <p>Typesafe library for performing simple modifcations of PDF files.</p>
+    <img src='https://github.com/jrobsontull/pdf-modify/actions/workflows/main.yml/badge.svg' />
 </div>
 
 ## Table of Contents
