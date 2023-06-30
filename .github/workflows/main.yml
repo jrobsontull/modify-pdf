@@ -1,4 +1,4 @@
-name: Lint files, run unit and build tests
+name: Testing
 "on": push
 jobs:
   unit_test-lint:
