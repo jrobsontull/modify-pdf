@@ -13,6 +13,10 @@ const loadDocument = async (file: File): Promise<PDFDocument | null> => {
   }
 };
 
+const loadDocumentFromBytes = async (data: string) => {
+  return await PDFDocument.load(data);
+};
+
 const documentToBlobUrl = async (document: PDFDocument): Promise<string> => {
   const bytes = await document.save();
   const blob = new Blob([bytes], { type: 'application/pdf' });
@@ -29,4 +33,9 @@ const blobToBase64 = async (
   });
 };
 
-export { createDocument, loadDocument, documentToBlobUrl };
+export {
+  createDocument,
+  loadDocument,
+  loadDocumentFromBytes,
+  documentToBlobUrl,
+};
