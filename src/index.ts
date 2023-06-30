@@ -1,3 +1,3 @@
-import { rotatePage, rotatePages } from './pdf-modify/rotate';
+import { rotatePage, rotatePages, rotateDocument } from './pdf-modify/rotate';
 
-export { rotatePage, rotatePages };
+export { rotatePage, rotatePages, rotateDocument };
