@@ -1,0 +1,45 @@
+{
+  "name": "pdf-modify",
+  "version": "1.0.0",
+  "description": "Typesafe library for making simple modifications to PDFs.",
+  "keywords": [
+    "pdf",
+    "typescript",
+    ""
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jrobsontull/pdf-modify.git"
+  },
+  "license": "MIT",
+  "private": "false",
+  "main": "dist/index.ts",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "author": "jrobsontull",
+  "bugs": {
+    "url": "https://github.com/jrobsontull/pdf-modify/issues"
+  },
+  "homepage": "https://github.com/jrobsontull/pdf-modify#readme",
+  "scripts": {
+    "build": "rollup -c rollup.config.mjs",
+    "start:dev": "rollup -c rollup.config.mjs -w",
+    "lint": "eslint \"src/*.ts\"",
+    "format": "prettier --write --config .prettierrc \"src/**/*.ts\" \"examples/**/*.ts\" \"examples/**/*.tsx\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "pdf-lib": "^1.17.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/parser": "^5.60.1",
+    "eslint": "^8.43.0",
+    "prettier": "^2.8.8",
+    "rollup": "^3.26.0",
+    "rollup-plugin-typescript2": "^0.35.0",
+    "typescript": "^5.1.6"
+  }
+}
