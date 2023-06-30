@@ -9,7 +9,11 @@ const mergeDocuments = async (
   }
 
   if (documents.length === 1) {
-    return documents[0];
+    if (documents[0]) {
+      return documents[0];
+    } else {
+      return null;
+    }
   }
 
   // Else do merge

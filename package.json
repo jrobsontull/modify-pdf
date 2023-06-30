@@ -13,7 +13,7 @@
   },
   "license": "MIT",
   "private": "false",
-  "main": "dist/index.ts",
+  "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
@@ -24,7 +24,8 @@
   },
   "homepage": "https://github.com/jrobsontull/pdf-modify#readme",
   "scripts": {
-    "build": "rollup -c rollup.config.mjs",
+    "clean": "rm -rf dist",
+    "build": "yarn clean && rollup -c rollup.config.mjs",
     "start:dev": "rollup -c rollup.config.mjs -w",
     "lint": "eslint \"src/*.ts\"",
     "format": "prettier --write --config .prettierrc \"src/**/*.ts\" \"examples/**/*.ts\" \"examples/**/*.tsx\"",

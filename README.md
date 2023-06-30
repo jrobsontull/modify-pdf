@@ -35,6 +35,8 @@ yarn add pdf-modify
 pnpm install pdf-modify
 ```
 
+<br/>
+
 `pdf-modify` can then be imported into your app as follows:
 
 ```tsx
