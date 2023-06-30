@@ -1,4 +1,3 @@
-export default function Foo() {
-  console.log('foo');
-  console.log('poo');
-}
+import { rotatePage, rotatePages } from './pdf-modify/rotate';
+
+export { rotatePage, rotatePages };
