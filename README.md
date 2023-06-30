@@ -148,6 +148,17 @@ Needs documenting.
 - `rotatePages()`
 - `rotatePage()`
 
+### Copying
+
+Needs documenting.
+
+- `copyDocument()`
+- `copyPage()`
+- `copyPages()`
+- `extractPage()`
+- `extractPages()`
+- `duplicatePages()`
+
 ### Metadata
 
 Needs documenting.
