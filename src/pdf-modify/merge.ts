@@ -1,6 +1,7 @@
 import { PDFDocument, PDFPage } from 'pdf-lib';
-import { createDocument } from './create';
+import { createDocument, loadDocument } from './create';
 
+// Merge documents of type PDFDocument
 const mergeDocuments = async (
   documents: PDFDocument[]
 ): Promise<PDFDocument | null> => {
@@ -28,6 +29,7 @@ const mergeDocuments = async (
   return merged;
 };
 
+// Merge pages of type PDFPage
 const mergePages = async (pages: PDFPage[]): Promise<PDFDocument | null> => {
   if (pages.length === 0) {
     return null;
@@ -47,4 +49,21 @@ const mergePages = async (pages: PDFPage[]): Promise<PDFDocument | null> => {
   return document;
 };
 
-export { mergeDocuments, mergePages };
+// Merge PDF files read using File API
+const mergeFiles = async (files: File[]) => {
+  const document = await createDocument();
+
+  for (const file of files) {
+    const loaded = await loadDocument(file);
+    if (loaded) {
+      const pages = loaded.getPages();
+      for (const page of pages) {
+        document.addPage(page);
+      }
+    }
+  }
+
+  return document;
+};
+
+export { mergeDocuments, mergePages, mergeFiles };
