@@ -29,7 +29,7 @@ const insertPages = async (
   const documentPages = document.getPages();
   const start = documentPages.slice(0, index);
   const end = documentPages.slice(index, documentPages.length);
-  const allPages = [...start, ...pages, ...end];
+  const allPages = start.concat(pages, end);
   for (const page of allPages) {
     final.addPage(page);
   }

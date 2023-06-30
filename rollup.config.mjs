@@ -13,5 +13,5 @@ export default {
     },
   ],
   plugins: [typescript()],
-  external: ['pdf-lib'],
+  external: ['pdf-lib', 'fs/promises'],
 };
