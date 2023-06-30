@@ -1,7 +1,7 @@
 import { PDFDocument } from 'pdf-lib';
 import { createDocument, documentToBlobUrl } from '../src';
 import { loadBase64File } from './utils';
-import { loadDocumentFromBytes } from '../src/pdf-modify/create';
+import { loadFromBytes } from '../src/pdf-modify/create';
 
 describe('create module', () => {
   test('document can be created', async () => {
@@ -10,7 +10,7 @@ describe('create module', () => {
 
   test('load from base64 string', async () => {
     const bytes = loadBase64File();
-    expect(await loadDocumentFromBytes(bytes)).toBeInstanceOf(PDFDocument);
+    expect(await loadFromBytes(bytes)).toBeInstanceOf(PDFDocument);
   });
 
   test('document to blob url', async () => {
