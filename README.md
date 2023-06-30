@@ -1,7 +1,7 @@
 <div align="center">
     <h1>modify-pdf</h1>
     <p>Typesafe library for performing simple modifcations of PDF files.</p>
-    <img src='https://github.com/jrobsontull/pdf-modify/actions/workflows/main.yml/badge.svg' />
+    <img src='https://github.com/jrobsontull/modify-pdf/actions/workflows/main.yml/badge.svg' />
 </div>
 
 ## Table of Contents
@@ -21,27 +21,27 @@
 Install the package using the package manager of your choice.
 
 ```bash
-npm install pdf-modify
+npm install modify-pdf
 ```
 
 ### yarn
 
 ```bash
-yarn add pdf-modify
+yarn add modify-pdf
 ```
 
 ### pnpm
 
 ```bash
-pnpm install pdf-modify
+pnpm install modify-pdf
 ```
 
 <br/>
 
-`pdf-modify` can then be imported into your app as follows:
+`modify-pdf` can then be imported into your app as follows:
 
 ```tsx
-import { rotateDocument } from 'pdf-modify';
+import { rotateDocument } from 'modify-pdf';
 import { PDFDocument } from 'pdf-lib';
 
 const document: PDFDocument; // some document
