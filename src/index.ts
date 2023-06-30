@@ -1,7 +1,7 @@
-import { createDocument } from './pdf-modify/create';
-import { rotatePage, rotatePages, rotateDocument } from './pdf-modify/rotate';
-import { mergeDocuments, mergePages } from './pdf-modify/merge';
-
-export { createDocument };
-export { rotatePage, rotatePages, rotateDocument };
-export { mergeDocuments, mergePages };
+export {
+  createDocument,
+  loadDocument,
+  documentToBlobUrl,
+} from './pdf-modify/create';
+export { rotatePage, rotatePages, rotateDocument } from './pdf-modify/rotate';
+export { mergeDocuments, mergePages } from './pdf-modify/merge';
