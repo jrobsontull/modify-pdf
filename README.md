@@ -7,16 +7,16 @@
 
 ## Table of Contents
 
-- <a href="#why">Why?</a>
-- <a href="#getting-started">Getting Started</a>
-- <a href="#documentation">Documentation</a>
-- <a href="#contributing">Contributing</a>
+- [Why?](#why)
+- [Getting Started](#getting-started)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
 
-<h2 id='why'>Why?</h2>
+## Why?
 
 `pdf-lib` provides a thorough toolset for manipulation of PDF files within JavaScript environments. This library provides an abstraction over `pdf-lib` for common tasks such as copying, merging, rotating, inserting and more!
 
-<h2 id='getting-started'>Getting Started</h2>
+## Getting Started
 
 ### npm
 
@@ -50,17 +50,35 @@ const document: PDFDocument = await loadLocalDocument('example.pdf');
 const rotated: PDFDocument = rotateDocument(document, 90); // 90° rotation
 ```
 
-<h2 id='documentation'>Documentation</h2>
+## Documentation
 
-### Creating and loading PDFs
+### Contents
+
+- [Creating and loading PDFs](#creating-pdfs)
+  - [Creating PDFs](#creating-pdfs)
+  - [Load PDF from HTML source](#load-pdf-from-html-source)
+  - [Load PDF from local source](#load-pdf-from-local-source)
+  - [Load PDF from base64 string](#load-pdf-from-base64-string)
+  - [Convert PDF to an object URL](#convert-pdf-to-an-object-url)
+- [Merging PDFs](#merge-documents)
+  - [Merge files](#merge-files)
+  - [Merge documents](#merge-documents)
+  - [Merge pages](#merge-pages)
+
+### Creating PDFs
+
+An empty PDF can be created with `createDocument()`. This generates a `PDFDocument`. See the pdf-lib [docs](https://pdf-lib.js.org/docs/api/classes/pdfdocument) for more details. There are no parameters for this function currently.
 
 ```ts
 import { createDocument } from 'modify-pdf';
 import { PDFDocument } from 'pdf-lib';
 
-const document: PDFDocument = await createDocument(); // creates an empty PDF
-// See https://pdf-lib.js.org/docs/api/classes/pdfdocument
+const document: PDFDocument = await createDocument();
 ```
+
+### Load PDF from HTML source
+
+Files read from a HTML input can be loaded using `loadDocument()`. This takes a `File` as a parameter. Make sure to pass only PDF documents. If the document fails to load, `null` is returned. An example of a React component is shown below.
 
 ```tsx
 import { loadDocument } from 'modify-pdf';
@@ -86,12 +104,20 @@ const MyComponent = () => {
 }
 ```
 
+### Load PDF from local source
+
+PDFs can be read from local sources using `loadLocalDocument()`. This requires a `str` argument for the location of the file on the local machine. If the document fails to load, `null` is returned.
+
 ```ts
 import { loadLocalDocument } from 'modify-pdf'; // uses fs library
 import { PDFDocument } from 'pdf-lib';
 
-const document: PDFDocument = await loadLocalDocument('example.pdf');
+const document: PDFDocument | null = await loadLocalDocument('example.pdf');
 ```
+
+### Load PDF from base64 string
+
+PDFs can be directly loaded from `base64` strings using `loadFromBytes()`. This takes a `str` argument for the data and returns `null` if the load fails.
 
 ```ts
 import { loadFromBytes } from 'modify-pdf';
@@ -113,8 +139,12 @@ const base64 =
   'EBAEsCwz3vrvRmOOyyOoGhZdutHN2MT55fIAVocD+AplbmRzdHJlYW0KZW5kb2JqCgpzdG' +
   'FydHhyZWYKNTEwCiUlRU9G';
 
-const document: PDFDocument = await loadFromBytes(base64);
+const document: PDFDocument | null = await loadFromBytes(base64);
 ```
+
+### Convert PDF to an object URL
+
+This is useful for displaying the PDF in the DOM e.g. in an `iframe`. Use `documentToBlobUrl()` to perform this conversion. The asynchronous function takes a `PDFDocument` as an argument and returns a `str`. An example React component is shown below.
 
 ```tsx
 import { documentToBlobUrl } from 'modify-pdf';
@@ -132,13 +162,59 @@ const MyComponent = () => {
 };
 ```
 
-### Merging PDFs
+### Merge files
 
-Needs documenting.
+A list of files can be merged to produce a single `PDFDocument`. Use the `mergeFiles()` function to achieve this. This takes `File[]` as an argument and always returns a `PDFDocument`. This is useful for merging PDF documents provided from a HTML input. An example React component is shown below.
 
-- `mergeDocuments()`
-- `mergePages()`
-- `mergeFiles()`
+```tsx
+import { mergeFiles } from 'modify-pdf';
+import { PDFDocument } from 'pdf-lib';
+
+const MyComponent = () => {
+    const handleChange = async (e: ChangEvent<HTMLInputElement>) {
+        const files = e.target.files;
+        // Assemble list of true PDF files
+        const pdfFiles: File[] = [];
+        for (const file of files) {
+            if (file.type === 'application/pdf') {
+                pdfFiles.push(file);
+            }
+        }
+        // Now merge files
+        const merged: PDFDocument = await mergeFiles(pdfFiles);
+    };
+
+    return (
+        <div>
+            <input type="file" onChange={(e) => handleChange(e)} />
+        </div>
+    );
+};
+```
+
+### Merge documents
+
+`mergeDocuments()` can be used to merge `PDFDocument[]` into a single `PDFDocument`. This takes an array of `PDFDocument` as an argument and returns a single `PDFDocument` or `null`.
+
+```ts
+import { mergeDocuments } from 'modify-pdf';
+import { PDFDocument } from 'pdf-lib';
+
+const documents: PDFDocument[] = [...] // array of documents;
+const merged: PDFDocument | null = await mergeDocuments(documents);
+```
+
+### Merge pages
+
+`mergePages()` can be used to merge individual PDF pages into a PDF document. This takes `PDFPage[]` as an argument and returns `PDFDocument` or `null`.
+
+```ts
+import { mergePages } from 'modify-pdf';
+import { PDFDocument, PDFPage } from 'pdf-lib';
+
+const pages: PDFPage[] = [...] // array of pages;
+const merged: PDFDocument | null = await mergePages(pages);
+```
 
 ### Rotating PDFs
 
@@ -174,7 +250,7 @@ Needs documenting.
 - `setMeta()`
 - `resetMeta()`
 
-<h2 id='contributing'>Contributing</h2>
+## Contributing
 
 We wlecome any and all contributions. Contribution guidelines will be updated soon but in the meantime there are some useful snippets below.
 

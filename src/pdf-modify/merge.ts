@@ -50,7 +50,7 @@ const mergePages = async (pages: PDFPage[]): Promise<PDFDocument | null> => {
 };
 
 // Merge PDF files read using File API
-const mergeFiles = async (files: File[]) => {
+const mergeFiles = async (files: File[]): Promise<PDFDocument> => {
   const document = await createDocument();
 
   for (const file of files) {
