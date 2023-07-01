@@ -216,13 +216,89 @@ const pages: PDFPage[] = [...] // array of pages;
 const merged: PDFDocument | null = await mergePages(pages);
 ```
 
-### Rotating PDFs
+### Rotate document
 
-Needs documenting.
+For rotating an entire PDF document. Use `rotateDocument()` with a `PDFDocument` and a rotation angle `number`.
 
-- `rotateDocument()`
-- `rotatePages()`
-- `rotatePage()`
+```ts
+import { createDocument, rotateDocument } from 'modify-pdf';
+import { PDFDocument } from 'pdf-lib';
+
+const document: PDFDocument = await createDocument(); // example document
+const rotated: PDFDocument = rotateDocument(document, 90); // 90° rotation
+```
+
+### Rotate page
+
+Use this to rotate an individual page. `rotatePage()` takes a `PDFPage` and a degree `number` as an argument.
+
+```ts
+import { createDocument, rotatePage } from 'modify-pdf';
+import { PDFDocument, PDFPage } from 'pdf-lib';
+
+const document: PDFDocument = await createDocument(); // example document
+const page: PDFPage = document.getPage(0); // page 1
+const rotated: PDFPage = rotatePage(page, 90); // 90° rotation
+```
+
+### Rotate pages
+
+Use this to rotate multiple pages in an array of pages. This can optionally take a range to rotate a subset of pages. `rotatePages()` has the following parameters:
+
+- pages: `PDFPage[]`
+- degree: `number`
+- start: `number | undefined`
+- end: `numnber | undefined`
+
+If no start and end is specified, all pages will be rotated by the same amount.
+
+```ts
+import { createDocument, rotatePages } from 'modify-pdf';
+import { PDFPage } from 'pdf-lib';
+
+const pages: PDFPage[] = [...] // example array
+
+const rotatedAll: PDFPage[] = rotatePages(pages, 90); // 90° rotation of all
+const rotatedSubset: PDFPage[] = rotatePages(pages, 90, 0, 2, 90); // 90° rotation of indexes 0 -> 2
+
+```
+
+### Rotate page in document
+
+Similar to `rotatePage()` except that this rotates a specific page inside of a document. `rotatePageInDoc` takes the following arguments:
+
+- documet: `PDFDocument`
+- degree: `number`
+- index: `number`
+
+```ts
+import { createDocument, rotatePageInDoc } from 'modify-pdf';
+import { PDFDocument } from 'pdf-lib';
+
+const document: PDFDocument = await createDocument(); // example document
+const rotated: PDFPage = await rotatePageInDoc(page, 90, 0); // 90° rotation of page 1
+```
+
+### Rotate pages in document
+
+Use this to rotate a subset of pages within a PDF document. Works similarly to `rotatePageInDoc()` but `rotatePagesInDoc()` can take a range for rotation. `rotatePagesInDoc()` takes the following arguments:
+
+- document: `PDFDocument`
+- degree: `number`
+- start: `number | undefined`
+- end: `numnber | undefined`
+
+If no start and end is specified, all pages will be rotated by the same amount.
+
+```ts
+import { createDocument, rotatePagesInDoc } from 'modify-pdf';
+import { PDFDocument } from 'pdf-lib';
+
+const document: PDFDocuemnt; // example document
+
+const rotatedAll: PDFDocument = await rotatePagesInDoc(document, 90); // 90° rotation of all pages
+const rotatedSubset: PDFDocument = await rotatePagesInDoc(pages, 90, 0, 2); // 90° rotation of pages 1 -> 3
+```
 
 ### Copying
 

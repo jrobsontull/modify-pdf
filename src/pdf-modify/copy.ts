@@ -19,8 +19,8 @@ const copyPage = (document: PDFDocument, index: number): PDFPage => {
 // Copy pages to PDFPages[]
 const copyPages = (
   document: PDFDocument,
-  start: number,
-  end: number
+  start?: number,
+  end?: number
 ): PDFPage[] => {
   const pages = document.getPages();
 
