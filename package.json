@@ -1,6 +1,6 @@
 {
   "name": "modify-pdf",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Typesafe library for making simple modifications to PDFs.",
   "keywords": [
     "pdf",
@@ -25,6 +25,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "yarn clean && rollup -c rollup.config.mjs",
+    "publish": "yarn build && npm publish",
     "start:dev": "rollup -c rollup.config.mjs -w",
     "lint": "eslint \"src/*.ts\"",
     "format": "prettier --write --config .prettierrc \"src/**/*.ts\" \"examples/**/*.ts\" \"examples/**/*.tsx\"",
