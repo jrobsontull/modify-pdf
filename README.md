@@ -64,6 +64,12 @@ const rotated: PDFDocument = rotateDocument(document, 90); // 90° rotation
   - [Merge files](#merge-files)
   - [Merge documents](#merge-documents)
   - [Merge pages](#merge-pages)
+- [Rotating PDFs](#rotate-document)
+  - [Rotate document](#rotate-document)
+  - [Rotate page](#rotate-page)
+  - [Rotate pages](#rotate-pages)
+  - [Rotate page in document](#rotate-page-in-document)
+  - [Rotate pages in document](#rotate-pages-in-document)
 
 ### Creating PDFs
 
