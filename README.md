@@ -52,7 +52,7 @@ const rotated: PDFDocument = rotateDocument(document, 90); // 90° rotation
 
 ## Documentation
 
-### Conents
+### Contents
 
 - [Creating and loading PDFs](#creating-pdfs)
   - [Creating PDFs](#creating-pdfs)
