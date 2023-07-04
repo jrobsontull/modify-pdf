@@ -25,7 +25,6 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "yarn clean && rollup -c rollup.config.mjs",
-    "publish": "yarn build && npm publish",
     "start:dev": "rollup -c rollup.config.mjs -w",
     "lint": "eslint \"src/*.ts\"",
     "format": "prettier --write --config .prettierrc \"src/**/*.ts\" \"examples/**/*.ts\" \"examples/**/*.tsx\"",

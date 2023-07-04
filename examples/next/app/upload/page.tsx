@@ -5,6 +5,8 @@ import {
   loadDocument,
   documentToBlobUrl,
   rotateDocument,
+  rotatePageInDoc,
+  rotatePagesInDoc,
 } from '../../../../dist/index';
 
 export default function Upload() {
@@ -12,6 +14,10 @@ export default function Upload() {
   const [modifiedUrl, setModifiedUrl] = useState<string>();
 
   const onChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    // Clean up blob urls
+    if (blobUrl && blobUrl.length > 0) URL.revokeObjectURL(blobUrl);
+    if (modifiedUrl && modifiedUrl.length > 0) URL.revokeObjectURL(modifiedUrl);
+
     const files = e.target.files;
     if (files && files[0] && files[0].type === 'application/pdf') {
       const doc = await loadDocument(files[0]);
@@ -19,8 +25,12 @@ export default function Upload() {
         setBlobUrl(await documentToBlobUrl(doc));
 
         // rotate pdf
-        const rotated = rotateDocument(doc, 90);
-        setModifiedUrl(await documentToBlobUrl(rotated));
+        const rotated = await rotatePagesInDoc(doc, 90, 2, 1);
+
+        // render
+        const modifiedUrl = await documentToBlobUrl(rotated);
+        setModifiedUrl(modifiedUrl);
+        open(modifiedUrl);
       }
     }
   };

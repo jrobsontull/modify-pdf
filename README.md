@@ -10,6 +10,7 @@
 - [Why?](#why)
 - [Getting Started](#getting-started)
 - [Documentation](#documentation)
+- [Toubleshooting](#troublshooting)
 - [Contributing](#contributing)
 
 ## Why?
@@ -236,7 +237,7 @@ const rotated: PDFDocument = rotateDocument(document, 90); // 90° rotation
 
 ### Rotate page
 
-Use this to rotate an individual page. `rotatePage()` takes a `PDFPage` and a degree `number` as an argument.
+Use this to rotate an individual page. `rotatePage()` takes a `PDFPage` and an angle `number` as an argument.
 
 ```ts
 import { createDocument, rotatePage } from 'modify-pdf';
@@ -252,7 +253,7 @@ const rotated: PDFPage = rotatePage(page, 90); // 90° rotation
 Use this to rotate multiple pages in an array of pages. This can optionally take a range to rotate a subset of pages. `rotatePages()` has the following parameters:
 
 - pages: `PDFPage[]`
-- degree: `number`
+- angle: `number`
 - start: `number | undefined`
 - end: `numnber | undefined`
 
@@ -274,7 +275,7 @@ const rotatedSubset: PDFPage[] = rotatePages(pages, 90, 0, 2, 90); // 90° rotat
 Similar to `rotatePage()` except that this rotates a specific page inside of a document. `rotatePageInDoc` takes the following arguments:
 
 - documet: `PDFDocument`
-- degree: `number`
+- angle: `number`
 - index: `number`
 
 ```ts
@@ -290,7 +291,7 @@ const rotated: PDFPage = await rotatePageInDoc(page, 90, 0); // 90° rotation of
 Use this to rotate a subset of pages within a PDF document. Works similarly to `rotatePageInDoc()` but `rotatePagesInDoc()` can take a range for rotation. `rotatePagesInDoc()` takes the following arguments:
 
 - document: `PDFDocument`
-- degree: `number`
+- angle: `number`
 - start: `number | undefined`
 - end: `numnber | undefined`
 
@@ -331,6 +332,46 @@ Needs documenting.
 - `getMeta()`
 - `setMeta()`
 - `resetMeta()`
+
+## Troublshooting
+
+If you import this library inside of the Next.js framework, you will need to adjust the webpack config since this module imports `fs/promises`. If you are using Webpack 5, change the following inside of `/next.config.js`:
+
+```js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        fs: false,
+      };
+    }
+
+    return config;
+  },
+};
+
+module.exports = nextConfig;
+```
+
+If using Webpack 4 or older versions of Next.js where this was the default, make the following adjustment to `/next.config.js`:
+
+```js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.node = {
+        fs: 'empty',
+      };
+    }
+
+    return config;
+  },
+};
+
+module.exports = nextConfig;
+```
 
 ## Contributing
 

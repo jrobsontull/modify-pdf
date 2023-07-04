@@ -1,5 +1,5 @@
 import { PDFDocument } from 'pdf-lib';
-import fs from 'fs/promises';
+import { isBrowser } from './utils';
 
 const createDocument = async (): Promise<PDFDocument> => {
   return await PDFDocument.create();
@@ -29,10 +29,20 @@ const loadDocument = async (file: File): Promise<PDFDocument | null> => {
 
 // Load using fs from local environment
 const loadLocalDocument = async (src: string): Promise<PDFDocument | null> => {
-  const buffer = await fs.readFile(src);
-  const name = src.split('/').pop() ?? 'file.pdf';
-  const file = new File([buffer], name);
-  return loadDocument(file);
+  if (isBrowser()) {
+    console.error(
+      'Incorrect usage of loadLocalDocument(). Cannot read from local environment whilst in the browser.'
+    );
+    return null;
+  }
+
+  // Dynamically import fs if in node env
+  return import('fs/promises').then(async (fs) => {
+    const buffer = await fs.readFile(src);
+    const name = src.split('/').pop() ?? 'file.pdf';
+    const file = new File([buffer], name);
+    return loadDocument(file);
+  });
 };
 
 // Load a base64 string
