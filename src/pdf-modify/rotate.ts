@@ -1,17 +1,22 @@
 import { PDFDocument, PDFPage, degrees } from 'pdf-lib';
-import { createDocument } from './create';
 
-const rotatePage = (page: PDFPage, degree: number): PDFPage => {
-  page.setRotation(degrees(degree));
+const rotatePage = (page: PDFPage, angle: number): PDFPage => {
+  page.setRotation(degrees(angle));
   return page;
 };
 
 const rotatePages = (
   pages: PDFPage[],
-  degree: number,
+  angle: number,
   start?: number,
   end?: number
 ): PDFPage[] => {
+  // Check if valid angle
+  if (!isValidAngle(angle)) {
+    console.error(errorMsg.invalidAngle);
+    return pages;
+  }
+
   // Rotate only a range
   if (start && end) {
     // Check if valid range
@@ -20,7 +25,7 @@ const rotatePages = (
 
       const toRotate = pages.slice(start, end + 1);
       for (const page of toRotate) {
-        page.setRotation(degrees(degree));
+        page.setRotation(degrees(angle));
       }
 
       const allPages = begin.concat(toRotate);
@@ -29,104 +34,109 @@ const rotatePages = (
       }
       return allPages;
     } else {
-      console.error('Invalid range for rotating pages.');
+      console.error(errorMsg.invalidRange);
       return pages;
     }
   }
 
   // Otherwise rotate all pages the same
   for (const page of pages) {
-    page.setRotation(degrees(degree));
+    page.setRotation(degrees(angle));
   }
   return pages;
 };
 
-const rotatePageInDoc = async (
+const rotatePageInDoc = (
   document: PDFDocument,
-  degree: number,
+  angle: number,
   index: number
-): Promise<PDFDocument> => {
+): PDFDocument => {
   const total = document.getPageCount();
+  // Check if valid range
   if (index > total - 1) {
-    console.error('Rotation index not in range.');
+    console.error(errorMsg.invalidIndex);
     return document;
   }
 
-  const rotatedDoc = await createDocument();
-  const pages = document.getPages();
-  const start = pages.slice(0, index);
+  // Check if valid angle
+  if (!isValidAngle(angle)) {
+    console.error(errorMsg.invalidAngle);
+    return document;
+  }
 
+  // Begin rotation
+  const pages = document.getPages();
   const rotatedPage = pages[index];
   if (rotatedPage) {
-    rotatedPage.setRotation(degrees(degree));
-    const allPages = start.concat(rotatedPage);
-
-    if (index !== total - 1) {
-      allPages.concat(pages.slice(index + 1));
-    }
-
-    for (const page of allPages) {
-      rotatedDoc.addPage(page);
-    }
-
-    return rotatedDoc;
+    rotatedPage.setRotation(degrees(angle));
+    return document;
   } else {
     // Can't find index
-    console.error('Rotation index not in range.');
+    console.error(errorMsg.invalidIndex);
     return document;
   }
 };
 
-const rotatePagesInDoc = async (
+const rotatePagesInDoc = (
   document: PDFDocument,
-  degree: number,
+  angle: number,
   start?: number,
   end?: number
-): Promise<PDFDocument> => {
+): PDFDocument => {
+  // Check if valid angle
+  if (!isValidAngle(angle)) {
+    console.error(errorMsg.invalidAngle);
+    return document;
+  }
+
   // Rotate only a range
-  const rotatedDoc = await createDocument();
   const pages = document.getPages();
-  if (start && end) {
+  if (typeof start === 'number' && typeof end === 'number') {
     // Check if valid range
     if (start >= 0 && start <= end && end <= pages.length - 1) {
-      const begin = pages.slice(0, start);
-
       const toRotate = pages.slice(start, end + 1);
       for (const page of toRotate) {
-        page.setRotation(degrees(degree));
+        page.setRotation(degrees(angle));
       }
 
-      const allPages = begin.concat(toRotate);
-      if (end !== pages.length - 1) {
-        allPages.concat(pages.slice(end + 1));
-      }
-
-      // Add pages to final document and return
-      for (const page of allPages) {
-        rotatedDoc.addPage(page);
-      }
-      return rotatedDoc;
+      return document;
     } else {
-      console.error('Invalid range for rotating pages.');
+      console.error(errorMsg.invalidRange);
       return document;
     }
   }
 
   // Otherwise rotate all pages the same
   for (const page of pages) {
-    const rotatedPage = page;
-    rotatedPage.setRotation(degrees(degree));
-    rotatedDoc.addPage(rotatedPage);
+    page.setRotation(degrees(angle));
   }
-  return rotatedDoc;
+  return document;
 };
 
-const rotateDocument = (doc: PDFDocument, degree: number): PDFDocument => {
-  const pages = doc.getPages();
+const rotateDocument = (document: PDFDocument, angle: number): PDFDocument => {
+  // Check if valid angle
+  if (!isValidAngle(angle)) {
+    console.error(errorMsg.invalidAngle);
+    return document;
+  }
+
+  // Continue rotation
+  const pages = document.getPages();
   pages.forEach((page) => {
-    page.setRotation(degrees(degree));
+    page.setRotation(degrees(angle));
   });
-  return doc;
+  return document;
+};
+
+const isValidAngle = (angle: number): boolean => {
+  if (angle % 90 === 0) return true;
+  return false;
+};
+
+const errorMsg = {
+  invalidRange: 'Invalid range for rotating pages.',
+  invalidAngle: 'Invalid rotation angle. Angle must be a multiple of 90.',
+  invalidIndex: 'Index for rotation not in range.',
 };
 
 export {
