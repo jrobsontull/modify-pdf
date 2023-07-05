@@ -46,11 +46,11 @@ const rotatePages = (
   return pages;
 };
 
-const rotatePageInDoc = async (
+const rotatePageInDoc = (
   document: PDFDocument,
   angle: number,
   index: number
-): Promise<PDFDocument> => {
+): PDFDocument => {
   const total = document.getPageCount();
   // Check if valid range
   if (index > total - 1) {
@@ -77,12 +77,12 @@ const rotatePageInDoc = async (
   }
 };
 
-const rotatePagesInDoc = async (
+const rotatePagesInDoc = (
   document: PDFDocument,
   angle: number,
   start?: number,
   end?: number
-): Promise<PDFDocument> => {
+): PDFDocument => {
   // Check if valid angle
   if (!isValidAngle(angle)) {
     console.error(errorMsg.invalidAngle);
