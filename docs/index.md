@@ -417,7 +417,7 @@ const rotatedAll: PDFDocument = await rotatePagesInDoc(document, 90); // 90° ro
 const rotatedSubset: PDFDocument = await rotatePagesInDoc(pages, 90, 0, 2); // 90° rotation of pages 1 -> 3
 ```
 
-## Copying
+## Copying (WIP)
 
 Needs documenting.
 
@@ -428,14 +428,14 @@ Needs documenting.
 - `extractPages()`
 - `duplicatePages()`
 
-## Inserting pages
+## Inserting pages (WIP)
 
 Needs documenting.
 
 - `insertPage()`
 - `insertPages()`
 
-## Metadata
+## Metadata (WIP)
 
 Needs documenting.
 

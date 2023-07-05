@@ -2,7 +2,8 @@
     <h1>modify-pdf</h1>
     <p>Typesafe library for performing simple modifcations of PDF files.</p>
     <p>Currently a <strong>WIP</strong> whilst we work torwards a stable release. <strong>PRs</strong> welcome.</p>
-    <img src='https://github.com/jrobsontull/modify-pdf/actions/workflows/main.yml/badge.svg' />
+    <img src='https://img.shields.io/npm/v/modify-pdf' />
+    <a href='https://www.npmjs.com/package/modify-pdf'><img src='https://github.com/jrobsontull/modify-pdf/actions/workflows/main.yml/badge.svg' /><a/>
 </div>
 
 ## Table of Contents

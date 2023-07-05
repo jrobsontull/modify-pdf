@@ -1,35 +1,40 @@
 import { PDFDocument, PDFPage } from 'pdf-lib';
 import { createDocument } from './create';
+import { errorMsg, log, range } from './utils';
 
 const copyDocument = async (document: PDFDocument): Promise<PDFDocument> => {
   return await document.copy();
 };
 
 // Copy page to PDFPage
-const copyPage = (document: PDFDocument, index: number): PDFPage => {
+const copyPage = (document: PDFDocument, index: number): PDFPage | null => {
   const total = document.getPageCount();
   if (index <= total - 1) {
     const page = document.getPage(index);
     return page;
   } else {
-    throw new Error('Index does not exist in document.');
+    log('error', 'copyPage', errorMsg.invalidIndex);
+    return null;
   }
 };
 
 // Copy pages to PDFPages[]
-const copyPages = (
+const copyPages = async (
   document: PDFDocument,
   start?: number,
   end?: number
-): PDFPage[] => {
+): Promise<PDFPage[] | null> => {
   const pages = document.getPages();
 
-  if (start && end) {
+  if (typeof start === 'number' && typeof end === 'number') {
     // Check if valid range
     if (start >= 0 && start <= end && end <= pages.length - 1) {
-      return pages.slice(start, end + 1);
+      const dummyDoc = await createDocument();
+      const pagesCopy = await dummyDoc.copyPages(document, range(start, end));
+      return pagesCopy;
     } else {
-      throw new Error('Invalid range for duplicating pages from.');
+      log('error', 'copyPages', errorMsg.invalidRange);
+      return null;
     }
   }
 
@@ -40,7 +45,7 @@ const copyPages = (
 const extractPage = async (
   document: PDFDocument,
   index: number
-): Promise<PDFDocument> => {
+): Promise<PDFDocument | null> => {
   const total = document.getPageCount();
   if (index <= total - 1) {
     const page = document.getPage(index);
@@ -48,7 +53,8 @@ const extractPage = async (
     newDocument.addPage(page);
     return newDocument;
   } else {
-    throw new Error('Index does not exist in document.');
+    log('error', 'extractPage', errorMsg.invalidIndex);
+    return null;
   }
 };
 
@@ -57,8 +63,8 @@ const extractPages = async (
   document: PDFDocument,
   start: number,
   end: number
-): Promise<PDFDocument> => {
-  if (start && end) {
+): Promise<PDFDocument | null> => {
+  if (typeof start === 'number' && typeof end === 'number') {
     const pages = document.getPages();
     // Check if valid range
     if (start >= 0 && start <= end && end <= pages.length - 1) {
@@ -69,7 +75,8 @@ const extractPages = async (
       }
       return newDocument;
     } else {
-      throw new Error('Invalid range for duplicating pages from.');
+      log('error', 'extractPages', errorMsg.invalidRange);
+      return null;
     }
   }
 
@@ -81,14 +88,15 @@ const duplicatePages = (
   document: PDFDocument,
   start?: number,
   end?: number
-) => {
+): PDFDocument | null => {
   const pages = document.getPages();
 
   if (start && end) {
     // Check if valid range
     if (start >= 0 && start <= end && end <= pages.length - 1) {
     } else {
-      throw new Error('Invalid range for duplicating pages from.');
+      log('error', 'copyPage', errorMsg.invalidRange);
+      return null;
     }
   }
 

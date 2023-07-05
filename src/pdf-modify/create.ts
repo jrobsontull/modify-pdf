@@ -1,5 +1,5 @@
 import { PDFDocument, PDFPage } from 'pdf-lib';
-import { isBrowser } from './utils';
+import { errorMsg, isBrowser, log } from './utils';
 
 const createDocument = async (pages?: PDFPage[]): Promise<PDFDocument> => {
   const document = await PDFDocument.create();
@@ -22,16 +22,21 @@ const loadDocument = async (file: File): Promise<PDFDocument | null> => {
         return PDFDocument.load(data)
           .then((doc) => doc)
           .catch((err) => {
-            console.error(`Failed to parse to PDF. ${err}`);
+            log('error', 'loadDocument', errorMsg.parseFailed, err);
             return null;
           });
       } else {
-        console.error(`Failed to load ${file.name}`);
+        log(
+          'error',
+          'loadDocument',
+          errorMsg.loadFailed,
+          `Failure reading: ${file.name}`
+        );
         return null;
       }
     })
     .catch((err) => {
-      console.error(`Failed to convert blob to base64. ${err}`);
+      log('error', 'loadDocument', errorMsg.blobConvertFailed, err);
       return null;
     });
 };
@@ -39,9 +44,7 @@ const loadDocument = async (file: File): Promise<PDFDocument | null> => {
 // Load using fs from local environment
 const loadLocalDocument = async (src: string): Promise<PDFDocument | null> => {
   if (isBrowser()) {
-    console.error(
-      'Incorrect usage of loadLocalDocument(). Cannot read from local environment whilst in the browser.'
-    );
+    log('error', 'loadLocalDocument', errorMsg.serverOnly);
     return null;
   }
 
@@ -59,7 +62,7 @@ const loadFromBytes = async (data: string): Promise<PDFDocument | null> => {
   try {
     return await PDFDocument.load(data);
   } catch (err) {
-    console.error(`Failed to parse PDF from bytes. ${err}`);
+    log('error', 'loadFromBytes', errorMsg.parseFailed, err);
     return null;
   }
 };

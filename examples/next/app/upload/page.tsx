@@ -13,7 +13,10 @@ import {
   rotatePages,
   createDocument,
   rotatePage,
+  copyPage,
+  copyPages,
 } from '../../../../dist/index';
+import { PDFPage } from 'pdf-lib';
 
 export default function Upload() {
   const [blobUrl, setBlobUrl] = useState<string>();
@@ -25,7 +28,7 @@ export default function Upload() {
     if (modifiedUrl && modifiedUrl.length > 0) URL.revokeObjectURL(modifiedUrl);
 
     const files = e.target.files;
-    console.log(files);
+
     if (
       files &&
       files[0] &&
@@ -41,18 +44,21 @@ export default function Upload() {
 
         // Pages
         const page1 = doc1.getPage(0);
-        const page2 = doc2.getPage(0);
+        const page2 = await copyPages(doc2, 0, 1);
+
+        if (page2) {
+          const mergedDoc = await createDocument([page1]);
+          console.log('create');
+          if (mergedDoc) {
+            // render
+            const modifiedUrl = await documentToBlobUrl(mergedDoc);
+            setModifiedUrl(modifiedUrl);
+            open(modifiedUrl);
+          }
+        }
 
         // rotate pdf
-        const merged = await rotatePage(page1, 90);
-        const mergedDoc = await createDocument([merged]);
-
-        if (merged) {
-          // render
-          const modifiedUrl = await documentToBlobUrl(mergedDoc);
-          setModifiedUrl(modifiedUrl);
-          open(modifiedUrl);
-        }
+        //const merged = await rotatePage(page1, 90);
       }
     }
   };

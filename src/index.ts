@@ -1,4 +1,10 @@
-export { copyDocument, copyPage, copyPages } from './pdf-modify/copy';
+export {
+  copyDocument,
+  copyPage,
+  copyPages,
+  extractPage,
+  extractPages,
+} from './pdf-modify/copy';
 export {
   createDocument,
   loadDocument,
