@@ -32,7 +32,17 @@ This is the documentation for the [modify-pdf](https://github.com/jrobsontull/mo
 
 An empty PDF can be created with `createDocument()`. This generates a `PDFDocument`. See the `pdf-lib` [documentation](https://pdf-lib.js.org/docs/api/classes/pdfdocument) for more details.
 
-Example usage:
+_Parameters:_
+
+| Argument | Type                   |
+| -------- | ---------------------- |
+| pages    | `PDFPage \| undefined` |
+
+_Return type:_
+
+`Promise<PDFDocument>`
+
+_Example usage:_
 
 ```ts
 import { createDocument } from 'modify-pdf';
@@ -179,7 +189,7 @@ const MyComponent = () => {
 
 ### Merge files
 
-A list of files can be merged to produce a single `PDFDocument` with the asynchronous `mergeFiles()` function. This is useful for merging PDF documents provided from a HTML input. An example React component is shown below.
+A list of files can be merged to produce a single `PDFDocument` with the asynchronous `mergeFiles()` function. This is useful for merging PDF documents provided from a HTML input. The function returns null if the array of files is empty. An example React component is shown below.
 
 _Parameters:_
 
@@ -189,7 +199,7 @@ _Parameters:_
 
 _Return type:_
 
-`Promise<PDFDocument>`
+`Promise<PDFDocument | null>`
 
 _Example usage:_
 

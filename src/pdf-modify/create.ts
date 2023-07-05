@@ -1,8 +1,17 @@
-import { PDFDocument } from 'pdf-lib';
+import { PDFDocument, PDFPage } from 'pdf-lib';
 import { isBrowser } from './utils';
 
-const createDocument = async (): Promise<PDFDocument> => {
-  return await PDFDocument.create();
+const createDocument = async (pages?: PDFPage[]): Promise<PDFDocument> => {
+  const document = await PDFDocument.create();
+
+  if (pages && pages.length > 0) {
+    for (const page of pages) {
+      const pageCopy = await document.copyPages(page.doc, [0]);
+      document.addPage(pageCopy[0]);
+    }
+  }
+
+  return document;
 };
 
 // Load using the File API

@@ -20,7 +20,8 @@ const mergeDocuments = async (
   // Else do merge
   const merged = await createDocument();
   for (const file of documents) {
-    const pages = file.getPages();
+    const indicies = file.getPageIndices();
+    const pages = await merged.copyPages(file, indicies);
     for (const page of pages) {
       merged.addPage(page);
     }
@@ -43,20 +44,26 @@ const mergePages = async (pages: PDFPage[]): Promise<PDFDocument | null> => {
   }
 
   for (const page of pages) {
-    document.addPage(page);
+    const pageCopy = await document.copyPages(page.doc, [0]);
+    document.addPage(pageCopy[0]);
   }
 
   return document;
 };
 
 // Merge PDF files read using File API
-const mergeFiles = async (files: File[]): Promise<PDFDocument> => {
+const mergeFiles = async (files: File[]): Promise<PDFDocument | null> => {
+  if (files.length === 0) {
+    return null;
+  }
+
   const document = await createDocument();
 
   for (const file of files) {
     const loaded = await loadDocument(file);
     if (loaded) {
-      const pages = loaded.getPages();
+      const indicies = loaded.getPageIndices();
+      const pages = await document.copyPages(loaded, indicies);
       for (const page of pages) {
         document.addPage(page);
       }
