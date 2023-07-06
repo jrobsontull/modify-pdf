@@ -2,7 +2,10 @@
     <h1>modify-pdf</h1>
     <p>Typesafe library for performing simple modifcations of PDF files.</p>
     <p>Currently a <strong>WIP</strong> whilst we work torwards a stable release. <strong>PRs</strong> welcome.</p>
-    <img src='https://github.com/jrobsontull/modify-pdf/actions/workflows/main.yml/badge.svg' />
+     <a href='https://www.npmjs.com/package/modify-pdf'><img src='https://img.shields.io/npm/v/modify-pdf' /></a>
+    <a href='https://github.com/jrobsontull/modify-pdf/actions/workflows/build.yml'><img src='https://github.com/jrobsontull/modify-pdf/actions/workflows/build.yml/badge.svg' /></a>
+   <a href='https://github.com/jrobsontull/modify-pdf/actions/workflows/test.yml'><img src='https://github.com/jrobsontull/modify-pdf/actions/workflows/test.yml/badge.svg' /></a>
+   <a href='https://github.com/jrobsontull/modify-pdf/actions/workflows/coverage.yml'><img src='https://github.com/jrobsontull/modify-pdf/actions/workflows/coverage.yml/badge.svg' /></a>
 </div>
 
 ## Table of Contents
@@ -54,6 +57,17 @@ const rotated: PDFDocument = rotateDocument(document, 90); // 90° rotation
 ## Documentation
 
 Please refer to our [documentation](https://jrobsontull.github.io/modify-pdf) page. Alternatively, the documentation can be found at `docs/index.md`.
+
+This pacakage is still a work in progress. Current status:
+
+- Creating PDFs ✅
+- Loading PDFs ✅
+- Rotating ✅
+- Merging ✅
+- Copying ✅
+- Metadata (WIP)
+- Testing (WIP)
+- Examples (WIP)
 
 ## Troubleshooting
 

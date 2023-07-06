@@ -336,12 +336,12 @@ Use `rotatePages()` to rotate multiple pages in an array of pages. This can opti
 
 _Parameters:_
 
-| Argument | Type                      |
-| -------- | ------------------------- |
-| pages    | `PDFPage`                 |
-| angle    | `number` (multiple of 90) |
-| start    | `number \| undefined`     |
-| end      | `number \| undefined`     |
+| Argument | Type                                 |
+| -------- | ------------------------------------ |
+| pages    | `PDFPage`                            |
+| angle    | `number` (multiple of 90)            |
+| start    | <code>number &#124; undefined</code> |
+| end      | <code>number &#124; undefined</code> |
 
 _Return type:_
 
@@ -392,20 +392,18 @@ Use `rotatePagesInDoc()` to rotate a subset of pages within a PDF document. Work
 
 _Parameters:_
 
-| Argument | Type                      |
-| -------- | ------------------------- |
-| document | `PDFDocument`             |
-| angle    | `number` (multiple of 90) |
-| start    | `number \| undefined`     |
-| end      | `number \| undefined`     |
+| Argument | Type                                 |
+| -------- | ------------------------------------ |
+| document | `PDFDocument`                        |
+| angle    | `number` (multiple of 90)            |
+| start    | <code>number &#124; undefined</code> |
+| end      | <code>number &#124; undefined</code> |
 
 _Return type:_
 
 `PDFDocument`
 
 _Example usage:_
-
-If no start and end is specified, all pages will be rotated by the same amount.
 
 ```ts
 import { createDocument, rotatePagesInDoc } from 'modify-pdf';
@@ -419,23 +417,115 @@ const rotatedSubset: PDFDocument = await rotatePagesInDoc(pages, 90, 0, 2); // 9
 
 ## Copying
 
-Needs documenting.
+### Copying documents
 
-- `copyDocument()`
-- `copyPage()`
-- `copyPages()`
-- `extractPage()`
-- `extractPages()`
-- `duplicatePages()`
+Use `copyDocument()` to return a copy of a PDF document.
 
-## Inserting pages
+_Parameters:_
+
+| Argument | Type          |
+| -------- | ------------- |
+| document | `PDFDocument` |
+
+_Return type:_
+
+`Promise<PDFDocument>`
+
+_Example usage:_
+
+```ts
+import { createDocument, copyDocument } from 'modify-pdf';
+import { PDFDocument } from 'pdf-lib';
+
+const document: PDFDocuemnt; // example document
+const copy: PDFDocument = await copyDocument(document);
+```
+
+### Extract a single page
+
+Use `extractPage()` to copy a single page into a new PDF document. This returns `null` if the index is invalid.
+
+_Parameters:_
+
+| Argument | Type          |
+| -------- | ------------- |
+| document | `PDFDocument` |
+| index    | `number`      |
+
+_Return type:_
+
+`Promise<PDFDocument | null>`
+
+_Example usage:_
+
+```ts
+import { createDocument, extractPage } from 'modify-pdf';
+import { PDFDocument } from 'pdf-lib';
+
+const document: PDFDocuemnt; // example document
+const extracted: PDFDocument | null = await extractPage(document, 0); // exrtract page 1
+```
+
+### Extract multiple pages
+
+Similar to the above function but `extractPages()` copies a range of pages to a new document. If the index is invalid, `null` is returned.
+
+_Parameters:_
+
+| Argument | Type          |
+| -------- | ------------- |
+| document | `PDFDocument` |
+| start    | `number`      |
+| end      | `number`      |
+
+_Return type:_
+
+`Promise<PDFDocument | null>`
+
+_Example usage:_
+
+```ts
+import { createDocument, extractPages } from 'modify-pdf';
+import { PDFDocument } from 'pdf-lib';
+
+const document: PDFDocuemnt; // example document
+const extracted: PDFDocument | null = await extractPages(document, 0, 3); // exrtract pages 1 -> 3
+```
+
+### Duplicate pages within a document
+
+`duplicatePages()` duplicates a page range within a document. Pages are duplicated where they occur within the document. If a range is not provided, all pages will be duplicated. If the range is invalid, `null` is returned.
+
+_Parameters:_
+
+| Argument | Type                                 |
+| -------- | ------------------------------------ |
+| document | `PDFDocument`                        |
+| start    | <code>number &#124; undefined</code> |
+| end      | <code>number &#124; undefined</code> |
+
+_Return type:_
+
+`Promise<PDFDocument | null>`
+
+_Example usage:_
+
+```ts
+import { createDocument, duplicatePages } from 'modify-pdf';
+import { PDFDocument } from 'pdf-lib';
+
+const document: PDFDocuemnt; // example document
+const duplicated: PDFDocument | null = await duplicatePages(document, 0, 3); // duplicate pages 1 -> 3
+```
+
+## Inserting pages (WIP)
 
 Needs documenting.
 
 - `insertPage()`
 - `insertPages()`
 
-## Metadata
+## Metadata (WIP)
 
 Needs documenting.
 

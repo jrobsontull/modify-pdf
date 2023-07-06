@@ -1,4 +1,5 @@
 import { PDFDocument, PDFPage, degrees } from 'pdf-lib';
+import { errorMsg, log } from './utils';
 
 const rotatePage = (page: PDFPage, angle: number): PDFPage => {
   page.setRotation(degrees(angle));
@@ -13,7 +14,7 @@ const rotatePages = (
 ): PDFPage[] => {
   // Check if valid angle
   if (!isValidAngle(angle)) {
-    console.error(errorMsg.invalidAngle);
+    log('error', 'rotatePages', errorMsg.invalidAngle);
     return pages;
   }
 
@@ -34,7 +35,7 @@ const rotatePages = (
       }
       return allPages;
     } else {
-      console.error(errorMsg.invalidRange);
+      log('error', 'rotatePages', errorMsg.invalidRange);
       return pages;
     }
   }
@@ -54,13 +55,13 @@ const rotatePageInDoc = (
   const total = document.getPageCount();
   // Check if valid range
   if (index > total - 1) {
-    console.error(errorMsg.invalidIndex);
+    log('error', 'rotatePageInDoc', errorMsg.invalidIndex);
     return document;
   }
 
   // Check if valid angle
   if (!isValidAngle(angle)) {
-    console.error(errorMsg.invalidAngle);
+    log('error', 'rotatePageInDoc', errorMsg.invalidAngle);
     return document;
   }
 
@@ -72,7 +73,7 @@ const rotatePageInDoc = (
     return document;
   } else {
     // Can't find index
-    console.error(errorMsg.invalidIndex);
+    log('error', 'rotatePageInDoc', errorMsg.invalidIndex);
     return document;
   }
 };
@@ -85,7 +86,7 @@ const rotatePagesInDoc = (
 ): PDFDocument => {
   // Check if valid angle
   if (!isValidAngle(angle)) {
-    console.error(errorMsg.invalidAngle);
+    log('error', 'rotatePagesInDoc', errorMsg.invalidAngle);
     return document;
   }
 
@@ -101,7 +102,7 @@ const rotatePagesInDoc = (
 
       return document;
     } else {
-      console.error(errorMsg.invalidRange);
+      log('error', 'rotatePagesInDoc', errorMsg.invalidRange);
       return document;
     }
   }
@@ -116,7 +117,7 @@ const rotatePagesInDoc = (
 const rotateDocument = (document: PDFDocument, angle: number): PDFDocument => {
   // Check if valid angle
   if (!isValidAngle(angle)) {
-    console.error(errorMsg.invalidAngle);
+    log('error', 'rotateDocument', errorMsg.invalidAngle);
     return document;
   }
 
@@ -131,12 +132,6 @@ const rotateDocument = (document: PDFDocument, angle: number): PDFDocument => {
 const isValidAngle = (angle: number): boolean => {
   if (angle % 90 === 0) return true;
   return false;
-};
-
-const errorMsg = {
-  invalidRange: 'Invalid range for rotating pages.',
-  invalidAngle: 'Invalid rotation angle. Angle must be a multiple of 90.',
-  invalidIndex: 'Index for rotation not in range.',
 };
 
 export {
