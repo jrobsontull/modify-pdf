@@ -1,4 +1,4 @@
-import { PDFDocument, PDFPage } from 'pdf-lib';
+import { PDFDocument } from 'pdf-lib';
 import { createDocument } from './create';
 import { errorMsg, log, range } from './utils';
 
@@ -6,7 +6,7 @@ const copyDocument = async (document: PDFDocument): Promise<PDFDocument> => {
   return await document.copy();
 };
 
-// Copy page to PDFPage
+/* // Copy page to PDFPage
 const copyPage = (document: PDFDocument, index: number): PDFPage | null => {
   const total = document.getPageCount();
   if (index <= total - 1) {
@@ -29,9 +29,9 @@ const copyPages = async (
   if (typeof start === 'number' && typeof end === 'number') {
     // Check if valid range
     if (start >= 0 && start <= end && end <= pages.length - 1) {
-      const dummyDoc = await createDocument();
-      const pagesCopy = await dummyDoc.copyPages(document, range(start, end));
-      return pagesCopy;
+      //const dummyDoc = await createDocument();
+      //const pagesCopy = await dummyDoc.copyPages(document, range(start, end));
+      return pages.slice(start, end + 1);
     } else {
       log('error', 'copyPages', errorMsg.invalidRange);
       return null;
@@ -39,19 +39,19 @@ const copyPages = async (
   }
 
   return pages;
-};
+}; */
 
 // Copy page to a document
 const extractPage = async (
   document: PDFDocument,
   index: number
 ): Promise<PDFDocument | null> => {
-  const total = document.getPageCount();
-  if (index <= total - 1) {
-    const page = document.getPage(index);
-    const newDocument = await createDocument();
-    newDocument.addPage(page);
-    return newDocument;
+  const pageCount = document.getPageCount();
+  if (index <= pageCount - 1) {
+    const extracted = await createDocument();
+    const page = await extracted.copyPages(document, [index]);
+    extracted.addPage(page[0]);
+    return extracted;
   } else {
     log('error', 'extractPage', errorMsg.invalidIndex);
     return null;
@@ -65,15 +65,15 @@ const extractPages = async (
   end: number
 ): Promise<PDFDocument | null> => {
   if (typeof start === 'number' && typeof end === 'number') {
-    const pages = document.getPages();
+    const pageCount = document.getPageCount();
     // Check if valid range
-    if (start >= 0 && start <= end && end <= pages.length - 1) {
-      const newDocument = await createDocument();
-      const toCopy = pages.slice(start, end + 1);
-      for (const page of toCopy) {
-        newDocument.addPage(page);
+    if (start >= 0 && start <= end && end <= pageCount - 1) {
+      const extracted = await createDocument();
+      const pages = await extracted.copyPages(document, range(start, end));
+      for (const page of pages) {
+        extracted.addPage(page);
       }
-      return newDocument;
+      return extracted;
     } else {
       log('error', 'extractPages', errorMsg.invalidRange);
       return null;
@@ -84,16 +84,31 @@ const extractPages = async (
 };
 
 // Duplicate pages within a document
-const duplicatePages = (
+const duplicatePages = async (
   document: PDFDocument,
   start?: number,
   end?: number
-): PDFDocument | null => {
-  const pages = document.getPages();
+): Promise<PDFDocument | null> => {
+  const pageCount = document.getPageCount();
+  const duplicated = await createDocument();
 
-  if (start && end) {
+  if (typeof start === 'number' && typeof end === 'number') {
     // Check if valid range
-    if (start >= 0 && start <= end && end <= pages.length - 1) {
+    if (start >= 0 && start <= end && end <= pageCount - 1) {
+      const pages = await duplicated.copyPages(
+        document,
+        document.getPageIndices()
+      );
+      for (let i = 0; i < pages.length; i++) {
+        if (i >= start && i <= end) {
+          duplicated.addPage(pages[i]);
+          duplicated.addPage(pages[i]);
+        } else {
+          duplicated.addPage(pages[i]);
+        }
+      }
+
+      return duplicated;
     } else {
       log('error', 'copyPage', errorMsg.invalidRange);
       return null;
@@ -101,18 +116,12 @@ const duplicatePages = (
   }
 
   // Else duplicate all pages
+  const pages = await duplicated.copyPages(document, document.getPageIndices());
   for (const page of pages) {
-    document.addPage(page);
+    duplicated.addPage(page);
   }
 
-  return document;
+  return duplicated;
 };
 
-export {
-  copyDocument,
-  copyPage,
-  copyPages,
-  duplicatePages,
-  extractPage,
-  extractPages,
-};
+export { copyDocument, duplicatePages, extractPage, extractPages };

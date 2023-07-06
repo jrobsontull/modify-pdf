@@ -13,10 +13,10 @@ import {
   rotatePages,
   createDocument,
   rotatePage,
-  copyPage,
-  copyPages,
+  extractPage,
+  extractPages,
+  duplicatePages,
 } from '../../../../dist/index';
-import { PDFPage } from 'pdf-lib';
 
 export default function Upload() {
   const [blobUrl, setBlobUrl] = useState<string>();
@@ -29,32 +29,25 @@ export default function Upload() {
 
     const files = e.target.files;
 
-    if (
-      files &&
-      files[0] &&
-      files[0].type === 'application/pdf' &&
-      files[1] &&
-      files[1].type === 'application/pdf'
-    ) {
+    if (files && files[0] && files[0].type === 'application/pdf') {
       const doc1 = await loadDocument(files[0]);
-      const doc2 = await loadDocument(files[1]);
+      //const doc2 = await loadDocument(files[1]);
 
-      if (doc1 && doc2) {
+      if (doc1) {
         setBlobUrl(await documentToBlobUrl(doc1));
 
         // Pages
-        const page1 = doc1.getPage(0);
-        const page2 = await copyPages(doc2, 0, 1);
+        const page1doc = await duplicatePages(doc1, 0, 1);
+        //const page2doc = await duplicatePages(doc2);
 
-        if (page2) {
-          const mergedDoc = await createDocument([page1]);
-          console.log('create');
-          if (mergedDoc) {
-            // render
-            const modifiedUrl = await documentToBlobUrl(mergedDoc);
-            setModifiedUrl(modifiedUrl);
-            open(modifiedUrl);
-          }
+        if (page1doc) {
+          //const mergedDoc = await mergeDocuments([page1doc, page2doc]);
+          // if (mergedDoc) {
+          // render
+          const modifiedUrl = await documentToBlobUrl(page1doc);
+          setModifiedUrl(modifiedUrl);
+          open(modifiedUrl);
+          //}
         }
 
         // rotate pdf

@@ -1,9 +1,8 @@
 export {
   copyDocument,
-  copyPage,
-  copyPages,
   extractPage,
   extractPages,
+  duplicatePages,
 } from './pdf-modify/copy';
 export {
   createDocument,

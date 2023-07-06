@@ -63,8 +63,8 @@ This pacakage is still a work in progress. Current status:
 - Creating PDFs ✅
 - Loading PDFs ✅
 - Rotating ✅
-- Copying (WIP)
-- Merging (WIP)
+- Merging ✅
+- Copying ✅
 - Metadata (WIP)
 - Testing (WIP)
 - Examples (WIP)

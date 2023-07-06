@@ -7,6 +7,7 @@ const isBrowser = (): boolean => {
 };
 
 const errorMsg = {
+  experimental: 'This feature is experimental and is subject to change.',
   invalidRange: 'Invalid range. Index of start or end out of range.',
   invalidAngle: 'Invalid angle. Angle must be a multiple of 90.',
   invalidIndex: 'Index out of range.',
@@ -18,7 +19,7 @@ const errorMsg = {
 };
 
 const log = (
-  type: 'error' | 'warning',
+  type: 'error' | 'warning' | 'log',
   from: string,
   msg: string,
   err?: unknown
@@ -28,6 +29,8 @@ const log = (
     console.error(content);
   } else if (type === 'warning') {
     console.warn(content);
+  } else if (type === 'log') {
+    console.log(content);
   }
 
   if (err) {

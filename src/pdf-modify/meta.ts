@@ -1,4 +1,5 @@
 import { PDFDocument } from 'pdf-lib';
+import { errorMsg, log } from './utils';
 
 // As defined at https://pdf-lib.js.org/docs/api/classes/pdfdocument
 type Meta = {
@@ -16,6 +17,8 @@ const setMeta = (
   document: PDFDocument,
   meta: Meta & { language?: string }
 ): PDFDocument => {
+  log('log', 'setMeta', errorMsg.experimental);
+
   if (Object.keys(meta).length === 0) {
     throw new Error('No meta data provided.');
   }
@@ -37,6 +40,8 @@ const setMeta = (
 };
 
 const getMeta = (documet: PDFDocument, meta: Meta): PDFDocument => {
+  log('log', 'getMeta', errorMsg.experimental);
+
   if (Object.keys(meta).length === 0) {
     throw new Error('No meta data provided.');
   }
@@ -57,6 +62,8 @@ const getMeta = (documet: PDFDocument, meta: Meta): PDFDocument => {
 };
 
 const resetMeta = (document: PDFDocument): PDFDocument => {
+  log('log', 'resetMeta', errorMsg.experimental);
+
   document.setAuthor('');
   document.setCreator('');
   document.setProducer('');
