@@ -405,8 +405,6 @@ _Return type:_
 
 _Example usage:_
 
-If no start and end is specified, all pages will be rotated by the same amount.
-
 ```ts
 import { createDocument, rotatePagesInDoc } from 'modify-pdf';
 import { PDFDocument } from 'pdf-lib';

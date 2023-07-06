@@ -56,6 +56,16 @@ const rotated: PDFDocument = rotateDocument(document, 90); // 90° rotation
 
 Please refer to our [documentation](https://jrobsontull.github.io/modify-pdf) page. Alternatively, the documentation can be found at `docs/index.md`.
 
+This pacakage is still a work in progress. Current status:
+
+- Creating PDFs ✅
+- Loading PDFs ✅
+- Rotating ✅
+- Copying (WIP)
+- Merging (WIP)
+- Metadata (WIP)
+- Examples (WIP)
+
 ## Troubleshooting
 
 If you are having issues, please check the [documentation](https://jrobsontull.github.io/modify-pdf) first and the troubleshooting section there. If that does not help, feel free to open an [issue](https://github.com/jrobsontull/modify-pdf/issues).
