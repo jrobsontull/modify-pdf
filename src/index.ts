@@ -13,7 +13,13 @@ export {
 } from './pdf-modify/create';
 export { insertPage, insertPages } from './pdf-modify/insert';
 export { mergeDocuments, mergePages, mergeFiles } from './pdf-modify/merge';
-export { getMeta, setMeta, resetMeta } from './pdf-modify/meta';
+export {
+  getMeta,
+  setMeta,
+  resetMeta,
+  Meta,
+  MetaQuery,
+} from './pdf-modify/meta';
 export {
   rotatePage,
   rotatePages,

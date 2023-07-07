@@ -27,6 +27,9 @@ This is the documentation for the [modify-pdf](https://github.com/jrobsontull/mo
   - [Duplicate pages within a document](#duplicate-pages-within-a-document)
 - [Inserting Pages](#inserting-pages)
 - [Metadata](#metadata)
+  - [Get metadata](#get-metadata)
+  - [Set metadata](#set-metadata)
+  - [Reset metadata](#reset-metadata)
 - [Troubleshooting](#troublshooting)
   - [Next.js usage](#nextjs-usage)
 
@@ -38,9 +41,9 @@ An empty PDF can be created with `createDocument()`. This generates a `PDFDocume
 
 _Parameters:_
 
-| Argument | Type                   |
-| -------- | ---------------------- |
-| pages    | `PDFPage \| undefined` |
+| Argument | Type                                  |
+| -------- | ------------------------------------- |
+| pages    | <code>PDFPage &#124; undefined</code> |
 
 _Return type:_
 
@@ -82,7 +85,8 @@ const MyComponent = () => {
         if (files && files[0] && files[0].type === 'application/pdf') {
             const document: PDFDocument | null = await loadDocument(files[0]);
             if (document) {
-                console.log(document.getTitle());
+              // Do something
+              console.log(document.getTitle());
             }
         }
     };
@@ -107,7 +111,7 @@ _Parameters:_
 
 _Return type:_
 
-`PDFDocument | null`
+`Promise<PDFDocument | null>`
 
 _Example usage:_
 
@@ -173,16 +177,16 @@ _Return type:_
 
 _Example usage:_
 
-```tsx
-import { documentToBlobUrl } from 'modify-pdf';
+```ts
+import { documentToBlobUrl, createDocument } from 'modify-pdf';
 import { PDFDocument } from 'pdf-lib';
 import { useState } from 'react';
 
 const MyComponent = () => {
   const [blobUrl, setBlobUrl] = useState<string>();
 
-  const document: PDFDocument; // example document
-  const url = await documentToBlobUrl(document);
+  const document: PDFDocument = await createDocument(); // example document
+  const url: string = await documentToBlobUrl(document);
   setBlobUrl(url);
 
   return <div>{blobUrl ? <iframe src={blobUrl} /> : null}</div>;
@@ -222,7 +226,7 @@ const MyComponent = () => {
             }
         }
         // Now merge files
-        const merged: PDFDocument = await mergeFiles(pdfFiles);
+        const merged: PDFDocument | null = await mergeFiles(pdfFiles);
     };
 
     return (
@@ -253,7 +257,7 @@ _Example usage:_
 import { mergeDocuments } from 'modify-pdf';
 import { PDFDocument } from 'pdf-lib';
 
-const documents: PDFDocument[] = [...] // array of documents;
+const documents: PDFDocument[] = [...]; // array of documents;
 const merged: PDFDocument | null = await mergeDocuments(documents);
 ```
 
@@ -277,7 +281,7 @@ _Example usage:_
 import { mergePages } from 'modify-pdf';
 import { PDFDocument, PDFPage } from 'pdf-lib';
 
-const pages: PDFPage[] = [...] // array of pages;
+const pages: PDFPage[] = [...]; // array of pages;
 const merged: PDFDocument | null = await mergePages(pages);
 ```
 
@@ -387,7 +391,7 @@ import { createDocument, rotatePageInDoc } from 'modify-pdf';
 import { PDFDocument } from 'pdf-lib';
 
 const document: PDFDocument = await createDocument(); // example document
-const rotated: PDFPage = await rotatePageInDoc(page, 90, 0); // 90° rotation of page 1
+const rotated: PDFDocument = await rotatePageInDoc(page, 90, 0); // 90° rotation of page 1
 ```
 
 ### Rotate pages in document
@@ -413,7 +417,7 @@ _Example usage:_
 import { createDocument, rotatePagesInDoc } from 'modify-pdf';
 import { PDFDocument } from 'pdf-lib';
 
-const document: PDFDocuemnt; // example document
+const document: PDFDocuemnt = await createDocument(); // example document
 
 const rotatedAll: PDFDocument = await rotatePagesInDoc(document, 90); // 90° rotation of all pages
 const rotatedSubset: PDFDocument = await rotatePagesInDoc(pages, 90, 0, 2); // 90° rotation of pages 1 -> 3
@@ -441,7 +445,7 @@ _Example usage:_
 import { createDocument, copyDocument } from 'modify-pdf';
 import { PDFDocument } from 'pdf-lib';
 
-const document: PDFDocuemnt; // example document
+const document: PDFDocuemnt = await createDocument(); // example document
 const copy: PDFDocument = await copyDocument(document);
 ```
 
@@ -466,7 +470,7 @@ _Example usage:_
 import { createDocument, extractPage } from 'modify-pdf';
 import { PDFDocument } from 'pdf-lib';
 
-const document: PDFDocuemnt; // example document
+const document: PDFDocuemnt = await createDocument(); // example document
 const extracted: PDFDocument | null = await extractPage(document, 0); // exrtract page 1
 ```
 
@@ -492,7 +496,7 @@ _Example usage:_
 import { createDocument, extractPages } from 'modify-pdf';
 import { PDFDocument } from 'pdf-lib';
 
-const document: PDFDocuemnt; // example document
+const document: PDFDocuemnt = await createDocument(); // example document
 const extracted: PDFDocument | null = await extractPages(document, 0, 3); // exrtract pages 1 -> 3
 ```
 
@@ -518,7 +522,7 @@ _Example usage:_
 import { createDocument, duplicatePages } from 'modify-pdf';
 import { PDFDocument } from 'pdf-lib';
 
-const document: PDFDocuemnt; // example document
+const document: PDFDocuemnt = await createDocument(); // example document
 const duplicated: PDFDocument | null = await duplicatePages(document, 0, 3); // duplicate pages 1 -> 3
 ```
 
@@ -531,11 +535,111 @@ Needs documenting.
 
 ## Metadata (WIP)
 
-Needs documenting.
+PDF documents have a range of metadata associated with them.
 
-- `getMeta()`
-- `setMeta()`
-- `resetMeta()`
+```ts
+{
+  author: string | undefined;
+  creator: string | undefined;
+  producer: string | undefined;
+  title: string | undefined;
+  keywords: string[] | string | undefined;
+  subject: string | undefined;
+  creationDate: Date | undefined;
+  modificationDate: Date | undefined;
+  language: string | undefined; // this cannot be read at present
+}
+```
+
+### Get metadata
+
+`getMeta()` is used to get the PDF file metadata. If no query is provided, all the metadata is returned.
+
+_Parameters:_
+
+| Argument | Type                               |
+| -------- | ---------------------------------- |
+| document | `PDFDocument`                      |
+| query    | <code>Meta &#124; undefined</code> |
+
+_Return type:_
+
+`Meta`
+
+_Example usage:_
+
+```ts
+import { createDocument, getMeta, MetaQuery } from 'modify-pdf';
+import { PDFDocument } from 'pdf-lib';
+
+const document: PDFDocuemnt = await createDocument(); // example document
+const allMeta: MetaQuery = getMeta(document); // get all metadata
+const result: Meta = getMeta(document, { title: true }); // get only the title
+const title: string | undefined = result.title;
+```
+
+### Set metadata
+
+`setMeta()` is used to set the metadata of a PDF file.
+
+_Parameters:_
+
+| Argument | Type                         |
+| -------- | ---------------------------- |
+| document | `PDFDocument`                |
+| meta     | `Meta & {language?: string}` |
+
+_Return type:_
+
+`void`
+
+_Example usage:_
+
+```ts
+import { createDocument, getMeta, setMeta, Meta } from 'modify-pdf';
+import { PDFDocument } from 'pdf-lib';
+
+const document: PDFDocuemnt = await createDocument(); // example document
+
+const previousMeta: Meta = getMeta(document);
+console.log(previousMeta);
+
+const newMeta: Meta = { title: 'Hello world!' };
+setMeta(document, newMeta);
+const updatedMeta: Meta = getMeta(document);
+console.log(updatedMeta);
+```
+
+### Reset metadata
+
+`resetMeta()` sets the metadata to default values. This clears all currently associated metadata.
+
+_Parameters:_
+
+| Argument | Type                         |
+| -------- | ---------------------------- |
+| document | `PDFDocument`                |
+| meta     | `Meta & {language?: string}` |
+
+_Return type:_
+
+`void`
+
+_Example usage:_
+
+```ts
+import { createDocument, getMeta, resetMeta, Meta } from 'modify-pdf';
+import { PDFDocument } from 'pdf-lib';
+
+const document: PDFDocuemnt = await createDocument(); // example document
+
+const previousMeta: Meta = getMeta(document);
+console.log(previousMeta);
+
+resetMeta(document);
+const newMeta: Meta = getMeta(document);
+console.log(newMeta);
+```
 
 ## Troublshooting
 

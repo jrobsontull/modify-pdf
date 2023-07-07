@@ -1,8 +1,19 @@
 import { PDFDocument } from 'pdf-lib';
-import { errorMsg, log } from './utils';
+import { errorMsg } from './utils';
 
 // As defined at https://pdf-lib.js.org/docs/api/classes/pdfdocument
-type Meta = {
+export type MetaQuery = {
+  author?: true;
+  creator?: true;
+  producer?: true;
+  title?: true;
+  keywords?: true;
+  subject?: true;
+  creationDate?: true;
+  modificationDate?: true;
+};
+
+export type Meta = {
   author?: string;
   creator?: string;
   producer?: string;
@@ -16,11 +27,9 @@ type Meta = {
 const setMeta = (
   document: PDFDocument,
   meta: Meta & { language?: string }
-): PDFDocument => {
-  log('log', 'setMeta', errorMsg.experimental);
-
+): void => {
   if (Object.keys(meta).length === 0) {
-    throw new Error('No meta data provided.');
+    throw new Error(`setMeta: ${errorMsg.metaEmpty}`);
   }
 
   meta.author && document.setAuthor(meta.author);
@@ -35,35 +44,39 @@ const setMeta = (
   meta.subject && document.setSubject(meta.subject);
   meta.creationDate && document.setCreationDate(meta.creationDate);
   meta.modificationDate && document.setModificationDate(meta.modificationDate);
-
-  return document;
 };
 
-const getMeta = (documet: PDFDocument, meta: Meta): PDFDocument => {
-  log('log', 'getMeta', errorMsg.experimental);
-
-  if (Object.keys(meta).length === 0) {
-    throw new Error('No meta data provided.');
-  }
-
+const getMeta = (documet: PDFDocument, query?: MetaQuery): Meta => {
   const documentMeta: Meta = {};
 
-  if (meta.author) documentMeta.author = documet.getAuthor();
-  if (meta.creator) documentMeta.creator = documet.getCreator();
-  if (meta.producer) documentMeta.producer = documet.getProducer();
-  if (meta.title) documentMeta.title = documet.getTitle();
-  if (meta.keywords) documentMeta.keywords = documet.getKeywords();
-  if (meta.subject) documentMeta.subject = documet.getSubject();
-  if (meta.creationDate) documentMeta.creationDate = documet.getCreationDate();
-  if (meta.modificationDate)
+  if (query && Object.keys(query).length > 0) {
+    // Get specific params
+    if (query.author) documentMeta.author = documet.getAuthor();
+    if (query.creator) documentMeta.creator = documet.getCreator();
+    if (query.producer) documentMeta.producer = documet.getProducer();
+    if (query.title) documentMeta.title = documet.getTitle();
+    if (query.keywords) documentMeta.keywords = documet.getKeywords();
+    if (query.subject) documentMeta.subject = documet.getSubject();
+    if (query.creationDate)
+      documentMeta.creationDate = documet.getCreationDate();
+    if (query.modificationDate)
+      documentMeta.modificationDate = documet.getModificationDate();
+  } else {
+    // Get all
+    documentMeta.author = documet.getAuthor();
+    documentMeta.creator = documet.getCreator();
+    documentMeta.producer = documet.getProducer();
+    documentMeta.title = documet.getTitle();
+    documentMeta.keywords = documet.getKeywords();
+    documentMeta.subject = documet.getSubject();
+    documentMeta.creationDate = documet.getCreationDate();
     documentMeta.modificationDate = documet.getModificationDate();
+  }
 
-  return documet;
+  return documentMeta;
 };
 
-const resetMeta = (document: PDFDocument): PDFDocument => {
-  log('log', 'resetMeta', errorMsg.experimental);
-
+const resetMeta = (document: PDFDocument): void => {
   document.setAuthor('');
   document.setCreator('');
   document.setProducer('');
@@ -72,8 +85,6 @@ const resetMeta = (document: PDFDocument): PDFDocument => {
   document.setSubject('');
   document.setCreationDate(new Date());
   document.setModificationDate(new Date());
-
-  return document;
 };
 
 export { setMeta, getMeta, resetMeta };

@@ -16,6 +16,7 @@ const errorMsg = {
   blobConvertFailed: `Failed to convert blob to base64.`,
   serverOnly:
     'Incorrect usage. This function only runs in node.js environments (server only).',
+  metaEmpty: 'Meta params are empty.',
 };
 
 const log = (
