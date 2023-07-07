@@ -1,6 +1,6 @@
 {
   "name": "modify-pdf",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Typesafe library for making simple modifications to PDFs.",
   "keywords": [
     "pdf",
