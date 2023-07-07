@@ -27,6 +27,9 @@ This is the documentation for the [modify-pdf](https://github.com/jrobsontull/mo
   - [Duplicate pages within a document](#duplicate-pages-within-a-document)
 - [Inserting Pages](#inserting-pages)
 - [Metadata](#metadata)
+  - [Get metadata](#get-metadata)
+  - [Set metadata](#set-metadata)
+  - [Reset metadata](#reset-metadata)
 - [Troubleshooting](#troublshooting)
   - [Next.js usage](#nextjs-usage)
 
@@ -532,11 +535,111 @@ Needs documenting.
 
 ## Metadata (WIP)
 
-Needs documenting.
+PDF documents have a range of metadata associated with them.
 
-- `getMeta()`
-- `setMeta()`
-- `resetMeta()`
+```ts
+{
+  author: string | undefined;
+  creator: string | undefined;
+  producer: string | undefined;
+  title: string | undefined;
+  keywords: string[] | string | undefined;
+  subject: string | undefined;
+  creationDate: Date | undefined;
+  modificationDate: Date | undefined;
+  language: string | undefined; // this cannot be read at present
+}
+```
+
+### Get metadata
+
+`getMeta()` is used to get the PDF file metadata. If no query is provided, all the metadata is returned.
+
+_Parameters:_
+
+| Argument | Type                               |
+| -------- | ---------------------------------- |
+| document | `PDFDocument`                      |
+| query    | <code>Meta &#124; undefined</code> |
+
+_Return type:_
+
+`Meta`
+
+_Example usage:_
+
+```ts
+import { createDocument, getMeta, MetaQuery } from 'modify-pdf';
+import { PDFDocument } from 'pdf-lib';
+
+const document: PDFDocuemnt = await createDocument(); // example document
+const allMeta: MetaQuery = getMeta(document); // get all metadata
+const result: Meta = getMeta(document, { title: true }); // get only the title
+const title: string | undefined = result.title;
+```
+
+### Set metadata
+
+`setMeta()` is used to set the metadata of a PDF file.
+
+_Parameters:_
+
+| Argument | Type                         |
+| -------- | ---------------------------- |
+| document | `PDFDocument`                |
+| meta     | `Meta & {language?: string}` |
+
+_Return type:_
+
+`void`
+
+_Example usage:_
+
+```ts
+import { createDocument, getMeta, setMeta, Meta } from 'modify-pdf';
+import { PDFDocument } from 'pdf-lib';
+
+const document: PDFDocuemnt = await createDocument(); // example document
+
+const previousMeta: Meta = getMeta(document);
+console.log(previousMeta);
+
+const newMeta: Meta = { title: 'Hello world!' };
+setMeta(document, newMeta);
+const updatedMeta: Meta = getMeta(document);
+console.log(updatedMeta);
+```
+
+### Reset metadata
+
+`resetMeta()` sets the metadata to default values. This clears all currently associated metadata.
+
+_Parameters:_
+
+| Argument | Type                         |
+| -------- | ---------------------------- |
+| document | `PDFDocument`                |
+| meta     | `Meta & {language?: string}` |
+
+_Return type:_
+
+`void`
+
+_Example usage:_
+
+```ts
+import { createDocument, getMeta, resetMeta, Meta } from 'modify-pdf';
+import { PDFDocument } from 'pdf-lib';
+
+const document: PDFDocuemnt = await createDocument(); // example document
+
+const previousMeta: Meta = getMeta(document);
+console.log(previousMeta);
+
+resetMeta(document);
+const newMeta: Meta = getMeta(document);
+console.log(newMeta);
+```
 
 ## Troublshooting
 

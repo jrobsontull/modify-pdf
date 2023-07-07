@@ -16,6 +16,9 @@ import {
   extractPage,
   extractPages,
   duplicatePages,
+  getMeta,
+  setMeta,
+  resetMeta,
 } from '../../../../dist/index';
 
 export default function Upload() {
@@ -36,22 +39,14 @@ export default function Upload() {
       if (doc1) {
         setBlobUrl(await documentToBlobUrl(doc1));
 
-        // Pages
-        const page1doc = await duplicatePages(doc1, 0, 1);
-        //const page2doc = await duplicatePages(doc2);
-
-        if (page1doc) {
-          //const mergedDoc = await mergeDocuments([page1doc, page2doc]);
-          // if (mergedDoc) {
-          // render
-          const modifiedUrl = await documentToBlobUrl(page1doc);
-          setModifiedUrl(modifiedUrl);
-          open(modifiedUrl);
-          //}
-        }
-
-        // rotate pdf
-        //const merged = await rotatePage(page1, 90);
+        // Meta modifications
+        const meta = getMeta(doc1);
+        console.log(meta);
+        setMeta(doc1, { title: 'beans' });
+        const modified = getMeta(doc1);
+        console.log(modified);
+        resetMeta(doc1);
+        console.log(getMeta(doc1));
       }
     }
   };
