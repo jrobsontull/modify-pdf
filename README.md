@@ -65,7 +65,8 @@ This pacakage is still a work in progress. Current status:
 - Rotating ✅
 - Merging ✅
 - Copying ✅
-- Metadata (WIP)
+- Metadata ✅
+- Inserting (WIP)
 - Testing (WIP)
 - Examples (WIP)
 
