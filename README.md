@@ -67,6 +67,7 @@ This pacakage is still a work in progress. Current status:
 - Copying ✅
 - Metadata ✅
 - Inserting (WIP)
+- Deleting (WIP)
 - Testing (WIP)
 - Examples (WIP)
 
